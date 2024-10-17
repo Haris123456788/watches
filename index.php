@@ -277,19 +277,33 @@ $popular_watches_result = $conn->query($popular_watches_query);
 
       <!-- ============================================-->
       <!-- <section> begin ============================-->
-      <section class="py-6 bg-dark">
+      <?php
+// Database connection
+include('db.php');
 
-        <div class="container">
-          <div class="row">
-            <div class="col-sm-6 col-lg-3 mb-4 mb-lg-0 d-flex flex-center"><img src="assets/img/gallery/rado.png" alt="brands" /></div>
-            <div class="col-sm-6 col-lg-3 mb-4 mb-lg-0 d-flex flex-center"><img src="assets/img/gallery/swatch.png" alt="brands" /></div>
-            <div class="col-sm-6 col-lg-3 mb-4 mb-lg-0 d-flex flex-center"><img src="assets/img/gallery/omega-1.png" alt="brands" /></div>
-            <div class="col-sm-6 col-lg-3 mb-4 mb-lg-0 d-flex flex-center"><img src="assets/img/gallery/zenith.png" alt="brands" /></div>
-          </div>
+// Fetch brand logos from the database
+$brands_query = "SELECT * FROM brands";
+$brands_result = $conn->query($brands_query);
+?>
+
+<section class="py-6 bg-dark">
+    <div class="container">
+        <div class="row">
+            <?php
+            // Loop through each brand and display its image
+            while ($brand = $brands_result->fetch_assoc()) {
+            ?>
+            <div class="col-sm-6 col-lg-3 mb-4 mb-lg-0 d-flex flex-center">
+                <img src="assets/img/gallery/<?php echo $brand['brand_image'] ?>" alt="<?php echo $brand['alt'] ?>" />
+            </div>
+            <?php
+            }
+            ?>
         </div>
-        <!-- end of .container-->
+    </div>
+    <!-- end of .container-->
+</section>
 
-      </section>
       <!-- <section> close ============================-->
       <!-- ============================================-->
 
