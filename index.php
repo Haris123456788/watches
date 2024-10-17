@@ -154,6 +154,7 @@
       <!---- Collections---->
       <?php
 include('db.php');
+
 // Fetch Latest Watches
 $latest_watches_query = "SELECT * FROM collections WHERE category = 'latest'";
 $latest_watches_result = $conn->query($latest_watches_query);
@@ -176,88 +177,102 @@ $popular_watches_result = $conn->query($popular_watches_query);
                         <button class="nav-link" id="nav-popular-tab" data-bs-toggle="tab" data-bs-target="#nav-popular" type="button" role="tab" aria-controls="nav-popular" aria-selected="false">POPULAR</button>
                     </div>
                 </nav>
+
                 <div class="tab-content" id="nav-tabContent">
+                    <!-- Latest Watches Tab -->
                     <div class="tab-pane fade show active" id="nav-latest" role="tabpanel" aria-labelledby="nav-latest-tab">
                         <div class="carousel slide" id="carouselLatest" data-bs-ride="carousel">
                             <div class="carousel-inner">
-                                <div class="carousel-item active" data-bs-interval="10000">
-                                    <div class="row h-100 align-items-center">
-                                        <?php if ($latest_watches_result->num_rows > 0): ?>
-                                            <?php while ($row = $latest_watches_result->fetch_assoc()): ?>
-                                                <div class="col-sm-6 col-md-4 mb-3 mb-md-0">
-                                                    <div class="card bg-black text-white p-6 pb-8">
-                                                        <img class="card-img"  src="assets/img/gallery/<?= htmlspecialchars($row['image']) ?>" alt="..." />
-                                                        <div class="card-img-overlay bg-dark-gradient d-flex flex-column-reverse align-items-center">
-                                                            <h6 class="text-primary"><?= htmlspecialchars($row['price']) ?></h6>
-                                                            <h4 class="text-light"><?= htmlspecialchars($row['name']) ?></h4>
-                                                        </div>
-                                                        <a class="stretched-link" href="#"></a>
-                                                    </div>
-                                                </div>
-                                            <?php endwhile; ?>
-                                        <?php else: ?>
-                                            <p>No latest watches available.</p>
-                                        <?php endif; ?>
+                                <?php 
+                                if ($latest_watches_result->num_rows > 0):
+                                    $count = 0; // Initialize counter for dividing rows of 3 items
+                                    while ($row = $latest_watches_result->fetch_assoc()): 
+                                        if ($count % 3 == 0): // Every 3 items, start a new carousel item
+                                            if ($count > 0) echo '</div></div>'; // Close the previous row and item if not the first one
+                                            echo '<div class="carousel-item '.($count == 0 ? 'active' : '').'"><div class="row h-100 align-items-center">'; // Open new carousel item
+                                        endif;
+                                ?>
+                                    <div class="col-sm-6 col-md-4 mb-3 mb-md-0">
+                                        <div class="card bg-black text-white p-6 pb-8">
+                                            <img class="card-img" src="assets/img/gallery/<?php echo $row['image'] ?>" alt="Watch image" />
+                                            <div class="card-img-overlay bg-dark-gradient d-flex flex-column-reverse align-items-center">
+                                                <h6 class="text-primary"><?php echo $row['price'] ?></h6>
+                                                <h4 class="text-light"><?php echo $row['name'] ?></h4>
+                                            </div>
+                                            <a class="stretched-link" href="#"></a>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselLatest" data-bs-slide="prev">
-                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Previous</span>
-                                    </button>
-                                    <button class="carousel-control-next" type="button" data-bs-target="#carouselLatest" data-bs-slide="next">
-                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Next</span>
-                                    </button>
-                                </div>
+                                <?php 
+                                        $count++;
+                                    endwhile;
+                                    echo '</div></div>'; // Close the last row and item
+                                else: 
+                                ?>
+                                    <p>No latest watches available.</p>
+                                <?php endif; ?>
                             </div>
+                            <!-- Carousel Controls -->
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselLatest" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselLatest" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
                         </div>
                     </div>
+
+                    <!-- Popular Watches Tab -->
                     <div class="tab-pane fade" id="nav-popular" role="tabpanel" aria-labelledby="nav-popular-tab">
                         <div class="carousel slide" id="carouselPopular" data-bs-ride="carousel">
                             <div class="carousel-inner">
-                                <div class="carousel-item active" data-bs-interval="10000">
-                                    <div class="row h-100 align-items-center">
-                                        <?php if ($popular_watches_result->num_rows > 0): ?>
-                                            <?php while ($row = $popular_watches_result->fetch_assoc()): ?>
-                                                <div class="col-sm-6 col-md-4 mb-3 mb-md-0">
-                                                    <div class="card bg-black text-white p-6 pb-8">
-                                                        <img class="card-img" src="assets/img/gallery/<?= htmlspecialchars($row['image']) ?>" alt="..." />
-                                                        <div class="card-img-overlay bg-dark-gradient d-flex flex-column-reverse align-items-center">
-                                                            <h6 class="text-primary"><?= htmlspecialchars($row['price']) ?></h6>
-                                                            <h4 class="text-light"><?= htmlspecialchars($row['name']) ?></h4>
-                                                        </div>
-                                                        <a class="stretched-link" href="#"></a>                                                    </div>
-                                                </div>
-                                            <?php endwhile; ?>
-                                        <?php else: ?>
-                                            <p>No popular watches available.</p>
-                                        <?php endif; ?>
+                                <?php 
+                                if ($popular_watches_result->num_rows > 0):
+                                    $count = 0; // Initialize counter for dividing rows of 3 items
+                                    while ($row = $popular_watches_result->fetch_assoc()): 
+                                        if ($count % 3 == 0): // Every 3 items, start a new carousel item
+                                            if ($count > 0) echo '</div></div>'; // Close the previous row and item if not the first one
+                                            echo '<div class="carousel-item '.($count == 0 ? 'active' : '').'"><div class="row h-100 align-items-center">'; // Open new carousel item
+                                        endif;
+                                ?>
+                                    <div class="col-sm-6 col-md-4 mb-3 mb-md-0">
+                                        <div class="card bg-black text-white p-6 pb-8">
+                                            <img class="card-img" src="assets/img/gallery/<?php echo $row['image'] ?>" alt="Watch image" />
+                                            <div class="card-img-overlay bg-dark-gradient d-flex flex-column-reverse align-items-center">
+                                                <h6 class="text-primary"><?php echo $row['price'] ?></h6>
+                                                <h4 class="text-light"><?php echo $row['name'] ?></h4>
+                                            </div>
+                                            <a class="stretched-link" href="#"></a>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselPopular" data-bs-slide="prev">
-                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Previous</span>
-                                    </button>
-                                    <button class="carousel-control-next" type="button" data-bs-target="#carouselPopular" data-bs-slide="next">
-                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="visually-hidden">Next</span>
-                                    </button>
-                                </div>
+                                <?php 
+                                        $count++;
+                                    endwhile;
+                                    echo '</div></div>'; // Close the last row and item
+                                else: 
+                                ?>
+                                    <p>No popular watches available.</p>
+                                <?php endif; ?>
                             </div>
+                            <!-- Carousel Controls -->
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselPopular" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselPopular" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                    </div> <!-- End of Popular Watches Tab -->
+                </div> <!-- End of Tab Content -->
+            </div> <!-- End of col-12 -->
+        </div> <!-- End of row h-100 -->
+    </div> <!-- End of container -->
 </section>
 
-<?php
-// Close the database connection
-$conn->close();
-?>
+
 
 
       <!-- ============================================-->
