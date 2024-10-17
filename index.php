@@ -41,20 +41,73 @@
     <main class="main" id="top">
     <?php  include ("header.php");?>
     
-      <section class="py-0" id="header">
+    <section class="py-0" id="header">
+  <div id="headerCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <!-- Carousel Item 1 -->
+      <div class="carousel-item active">
         <div class="bg-holder" style="background-image:url(assets/img/gallery/header-bg.png);background-position:right top;background-size:contain;">
         </div>
-        <!--/.bg-holder-->
-
         <div class="container">
           <div class="row align-items-center min-vh-75 min-vh-xl-100">
             <div class="col-md-8 col-lg-6 text-md-start text-center">
               <h1 class="display-1 lh-sm text-uppercase text-light">Custom Watches For <br class="d-none d-xxl-block" /> Any Occasion</h1>
-              <div class="pt-4"><a class="btn btn-sm btn-outline-primary me-3" href="#">DESIGN &amp; ORDER</a><a class="btn btn-sm btn-outline-primary" href="#">REQUEST VIRTUAL</a></div>
+              <div class="pt-4">
+                <a class="btn btn-sm btn-outline-primary me-3" href="#">DESIGN &amp; ORDER</a>
+                <a class="btn btn-sm btn-outline-primary" href="#">REQUEST VIRTUAL</a>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+
+      <!-- Carousel Item 2 -->
+      <div class="carousel-item">
+        <div class="bg-holder" style="background-image:url(assets/img/gallery/header-bg2.png);background-position:right top;background-size:contain;">
+        </div>
+        <div class="container">
+          <div class="row align-items-center min-vh-75 min-vh-xl-100">
+            <div class="col-md-8 col-lg-6 text-md-start text-center">
+              <h1 class="display-1 lh-sm text-uppercase text-light">Elegant Timepieces for <br class="d-none d-xxl-block" /> Every Style</h1>
+              <div class="pt-4">
+                <a class="btn btn-sm btn-outline-primary me-3" href="#">SHOP NOW</a>
+                <a class="btn btn-sm btn-outline-primary" href="#">LEARN MORE</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Carousel Item 3 -->
+      <div class="carousel-item">
+        <div class="bg-holder" style="background-image:url(assets/img/gallery/header-bg3.png);background-position:right top;background-size:contain;">
+        </div>
+        <div class="container">
+          <div class="row align-items-center min-vh-75 min-vh-xl-100">
+            <div class="col-md-8 col-lg-6 text-md-start text-center">
+              <h1 class="display-1 lh-sm text-uppercase text-light">Exclusive Designs <br class="d-none d-xxl-block" /> Crafted for You</h1>
+              <div class="pt-4">
+                <a class="btn btn-sm btn-outline-primary me-3" href="#">CUSTOMIZE</a>
+                <a class="btn btn-sm btn-outline-primary" href="#">EXPLORE COLLECTION</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carousel Controls -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#headerCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#headerCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+</section>
+
       <section class="bg-black py-8 pt-0" id="store">
         <div class="bg-holder" style="background-image:url(assets/img/gallery/store-bg.png);background-position:left bottom;background-size:contain;">
         </div>
