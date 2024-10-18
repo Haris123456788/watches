@@ -104,48 +104,68 @@ $carousel_result = $conn->query($carousel_query);
 
 
 
-      <section class="bg-black py-8 pt-0" id="store">
-        <div class="bg-holder" style="background-image:url(assets/img/gallery/store-bg.png);background-position:left bottom;background-size:contain;">
-        </div>
-        <!--/.bg-holder-->
+<?php
+include('db.php');
 
-        <div class="container-lg">
-          <div class="row flex-center">
-            <div class="col-6 order-md-0 text-center text-md-start"></div>
-            <div class="col-sm-10 col-md-6 col-lg-6 text-center text-md-start">
-              <div class="col-4 position-relative ms-auto py-5"><a class="carousel-control-prev carousel-icon z-index-2" href="#carouselExampleFade" role="button" data-bs-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Previous</span></a><a class="carousel-control-next carousel-icon z-index-2" href="#carouselExampleFade" role="button" data-bs-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Next</span></a></div>
-              <div class="carousel slide carousel-fade" id="carouselExampleFade" data-bs-ride="carousel">
-                <div class="carousel-inner">
-                  <div class="carousel-item active">
-                    <div class="row h-100">
-                      <div class="col-12">
-                        <h5 class="fs-3 fs-lg-5 lh-sm text-uppercase">Our store</h5>
-                        <p class="my-4 pe-xl-5">Memphis clinched a spot in the play-in tournament with the victory, but the fight for seeding continues. The race for the No. 8 spot in the West -- and the safety net of having to win just one of two games to make the playoffs -- could come down to the regular seasons final day, when Memphis and Golden State meet. The good thing for the Grizzlies is they dont have to leave home until that matchup as they have games against Dallas and two against Sacramento before the finale.</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="carousel-item">
-                    <div class="row h-100">
-                      <div class="col-12">
-                        <h5 class="fs-3 fs-lg-5 lh-sm text-uppercase">Our store</h5>
-                        <p class="my-4 pe-xl-5">Memphis clinched a spot in the play-in tournament with the victory, but the fight for seeding continues. The race for the No. 8 spot in the West -- and the safety net of having to win just one of two games to make the playoffs -- could come down to the regular seasons final day, when Memphis and Golden State meet. The good thing for the Grizzlies is they dont have to leave home until that matchup as they have games against Dallas and two against Sacramento before the finale.</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="carousel-item">
-                    <div class="row h-100">
-                      <div class="col-12">
-                        <h5 class="fs-3 fs-lg-5 lh-sm text-uppercase">Our store</h5>
-                        <p class="my-4 pe-xl-5">Memphis clinched a spot in the play-in tournament with the victory, but the fight for seeding continues. The race for the No. 8 spot in the West -- and the safety net of having to win just one of two games to make the playoffs -- could come down to the regular seasons final day, when Memphis and Golden State meet. The good thing for the Grizzlies is they dont have to leave home until that matchup as they have games against Dallas and two against Sacramento before the finale.</p>
-                      </div>
-                    </div>
-                  </div>
+// Fetch store items from the database
+$store_query = "SELECT * FROM store";
+$store_result = $conn->query($store_query);
+?>
+
+<section class="bg-black py-8 pt-0" id="store">
+  <div class="bg-holder" style="background-image:url(assets/img/gallery/store-bg.png);background-position:left bottom;background-size:contain;">
+  </div>
+  <!--/.bg-holder-->
+
+  <div class="container-lg">
+    <div class="row flex-center">
+      <div class="col-6 order-md-0 text-center text-md-start"></div>
+      <div class="col-sm-10 col-md-6 col-lg-6 text-center text-md-start">
+        <div class="col-4 position-relative ms-auto py-5">
+          <a class="carousel-control-prev carousel-icon z-index-2" href="#carouselExampleFade" role="button" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </a>
+          <a class="carousel-control-next carousel-icon z-index-2" href="#carouselExampleFade" role="button" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </a>
+        </div>
+        
+        <!-- Dynamic Carousel -->
+        <div class="carousel slide carousel-fade" id="carouselExampleFade" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <?php
+            if ($store_result->num_rows > 0):
+              $isActive = true; // First item active
+              while ($row = $store_result->fetch_assoc()):
+            ?>
+            <!-- Dynamic Carousel Item -->
+            <div class="carousel-item <?php echo $isActive ? 'active' : ''; ?>">
+              <div class="row h-100">
+                <div class="col-12">
+                  <h5 class="fs-3 fs-lg-5 lh-sm text-uppercase"><?php echo $row['heading'] ?></h5>
+                  <p class="my-4 pe-xl-5">
+                    <?php echo $row['description'] ?>
+                  </p>
                 </div>
               </div>
             </div>
+            <?php
+              $isActive = false; // Set active to false after first item
+              endwhile;
+            else:
+            ?>
+            <p>No store items available.</p>
+            <?php endif; ?>
           </div>
         </div>
-      </section>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 
       <!---- Collections---->
       <?php
@@ -272,7 +292,7 @@ $popular_watches_result = $conn->query($popular_watches_query);
 
 
       <!-- ============================================-->
-      <!-- <section> begin ============================-->
+      <!-- <section> begin logos/brands ============================-->
       <?php
 // Database connection
 include('db.php');
@@ -307,120 +327,110 @@ $brands_result = $conn->query($brands_query);
 
 
       <!-- ============================================-->
-      <!-- <section> begin ============================-->
-      <section id="testimonial">
+      <?php
+// Include your database connection
+include('db.php'); // Make sure to replace with your actual database connection file
 
-        <div class="container">
-          <div class="row">
+// Fetch testimonials from the database
+$testimonial_query = "SELECT * FROM testimonials"; // Adjust the table name as necessary
+$testimonial_result = $conn->query($testimonial_query);
+?>
+
+<section id="testimonial">
+    <div class="container">
+        <div class="row">
             <div class="col-lg-7 mx-auto text-center my-5">
-              <h5 class="fs-3 fs-lg-5 lh-sm mb-0 text-uppercase">what customers are saying</h5>
+                <h5 class="fs-3 fs-lg-5 lh-sm mb-0 text-uppercase">What Customers Are Saying</h5>
             </div>
-          </div>
-          <div class="row flex-center h-100">
-            <div class="col-xl-9">
-              <div class="carousel slide" id="carouselTestimonials" data-bs-ride="carousel">
-                <div class="carousel-inner">
-                  <div class="carousel-item active" data-bs-interval="10000">
-                    <div class="row h-100 justify-content-center">
-                      <div class="col-md-6 mb-4">
-                        <div class="card h-100 shadow card-span p-3 bg-black">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center"><img class="img-fluid" src="assets/img/gallery/smith.png" width="80" alt="testimonials" />
-                              <div class="flex-1 ms-4">
-                                <h6 class="fs-lg-1 mb-1 text-uppercase">amanda smith</h6>
-                              </div>
-                            </div>
-                            <p class="mb-0 mt-4 fw-light lh-lg">Nisi cumque in necessitatibus molestiae eaque excepturi ab. Laboriosam ipsam voluptatem voluptatibus labore quam nihil. Quasi occaecati quos ratione quia aut molestiae velit et.</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-6 mb-4">
-                        <div class="card h-100 shadow card-span p-3 bg-black">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center"><img class="img-fluid" src="assets/img/gallery/sandra-willims.png" width="80" alt="testimonials" />
-                              <div class="flex-1 ms-4">
-                                <h6 class="fs-lg-1 mb-1 text-uppercase">Ainara Vergara</h6>
-                              </div>
-                            </div>
-                            <p class="mb-0 mt-4 fw-light lh-lg">Nisi cumque in necessitatibus molestiae eaque excepturi ab. Laboriosam ipsam voluptatem voluptatibus labore quam nihil. Quasi occaecati quos ratione quia aut molestiae velit et.</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="carousel-item" data-bs-interval="5000">
-                    <div class="row h-100 justify-content-center">
-                      <div class="col-md-6 mb-4">
-                        <div class="card h-100 shadow card-span p-3 bg-black">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center"><img class="img-fluid" src="assets/img/gallery/smith.png" width="80" alt="testimonials" />
-                              <div class="flex-1 ms-4">
-                                <h6 class="fs-lg-1 mb-1 text-uppercase">Niek Bove</h6>
-                              </div>
-                            </div>
-                            <p class="mb-0 mt-4 fw-light lh-lg">Nisi cumque in necessitatibus molestiae eaque excepturi ab. Laboriosam ipsam voluptatem voluptatibus labore quam nihil. Quasi occaecati quos ratione quia aut molestiae velit et.</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-6 mb-4">
-                        <div class="card h-100 shadow card-span p-3 bg-black">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center"><img class="img-fluid" src="assets/img/gallery/sandra-willims.png" width="80" alt="testimonials" />
-                              <div class="flex-1 ms-4">
-                                <h6 class="fs-lg-1 mb-1 text-uppercase">Ainara Vergara</h6>
-                              </div>
-                            </div>
-                            <p class="mb-0 mt-4 fw-light lh-lg">Nisi cumque in necessitatibus molestiae eaque excepturi ab. Laboriosam ipsam voluptatem voluptatibus labore quam nihil. Quasi occaecati quos ratione quia aut molestiae velit et.</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="carousel-item">
-                    <div class="row h-100 justify-content-center">
-                      <div class="col-md-6 mb-4">
-                        <div class="card h-100 shadow card-span p-3 bg-black">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center"><img class="img-fluid" src="assets/img/gallery/smith.png" width="80" alt="testimonials" />
-                              <div class="flex-1 ms-4">
-                                <h6 class="fs-lg-1 mb-1 text-uppercase">amanda smith</h6>
-                              </div>
-                            </div>
-                            <p class="mb-0 mt-4 fw-light lh-lg">Nisi cumque in necessitatibus molestiae eaque excepturi ab. Laboriosam ipsam voluptatem voluptatibus labore quam nihil. Quasi occaecati quos ratione quia aut molestiae velit et.</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-6 mb-4">
-                        <div class="card h-100 shadow card-span p-3 bg-black">
-                          <div class="card-body">
-                            <div class="d-flex align-items-center"><img class="img-fluid" src="assets/img/gallery/sandra-willims.png" width="80" alt="testimonials" />
-                              <div class="flex-1 ms-4">
-                                <h6 class="fs-lg-1 mb-1 text-uppercase">Ainara Vergara</h6>
-                              </div>
-                            </div>
-                            <p class="mb-0 mt-4 fw-light lh-lg">Nisi cumque in necessitatibus molestiae eaque excepturi ab. Laboriosam ipsam voluptatem voluptatibus labore quam nihil. Quasi occaecati quos ratione quia aut molestiae velit et.</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row mt-5 flex-center">
-                  <div class="col-auto position-relative z-index-2">
-                    <ol class="carousel-indicators">
-                      <li class="active mx-2" data-bs-target="#carouselTestimonials" data-bs-slide-to="0"></li>
-                      <li class="mx-2" data-bs-target="#carouselTestimonials" data-bs-slide-to="1"></li>
-                      <li class="mx-2" data-bs-target="#carouselTestimonials" data-bs-slide-to="2"></li>
-                    </ol>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-        <!-- end of .container-->
+        <div class="row flex-center h-100">
+            <div class="col-xl-9">
+                <div class="carousel slide" id="carouselTestimonials" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <?php
+                        if ($testimonial_result->num_rows > 0):
+                            $isActive = true; // Flag to mark the first item as active
+                            $testimonial_count = 0; // Counter for testimonials
+                            
+                            // Create a loop to fetch testimonials
+                            while ($row = $testimonial_result->fetch_assoc()):
+                                if ($testimonial_count % 2 == 0): // Start a new carousel item every two testimonials
+                        ?>
+                        <div class="carousel-item <?php echo $isActive ? 'active' : ''; ?>" data-bs-interval="5000">
+                            <div class="row h-100 justify-content-center">
+                        <?php endif; ?>
+                            
+                                <div class="col-md-6 mb-4">
+                                    <div class="card h-100 shadow card-span p-3 bg-black">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <img class="img-fluid" src="assets/img/gallery/<?php echo htmlspecialchars($row['image']); ?>" width="80" alt="testimonials" />
+                                                <div class="flex-1 ms-4">
+                                                    <h6 class="fs-lg-1 mb-1 text-uppercase"><?php echo htmlspecialchars($row['name']); ?></h6>
+                                                </div>
+                                            </div>
+                                            <p class="mb-0 mt-4 fw-light lh-lg"><?php echo htmlspecialchars($row['message']); ?></p>
+                                        </div>
+                                    </div>
+                                </div>
 
-      </section>
+                        <?php
+                                $testimonial_count++; // Increment the counter
+                                
+                                // Close the carousel item every two testimonials
+                                if ($testimonial_count % 2 == 0 || $testimonial_count === $testimonial_result->num_rows): 
+                        ?>
+                            </div> <!-- End row -->
+                        </div> <!-- End carousel-item -->
+                        <?php
+                                $isActive = false; // After the first iteration, set active to false
+                                endif;
+                            endwhile;
+                        else:
+                        ?>
+                        <div class="carousel-item active" data-bs-interval="5000">
+                            <div class="row h-100 justify-content-center">
+                                <div class="col-md-6 mb-4">
+                                    <div class="card h-100 shadow card-span p-3 bg-black">
+                                        <div class="card-body">
+                                            <p class="mb-0 mt-4 fw-light lh-lg">No testimonials available.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="row mt-5 flex-center">
+                        <div class="col-auto position-relative z-index-2">
+                            <ol class="carousel-indicators">
+                                <?php
+                                // Reset result pointer to the beginning
+                                $testimonial_result->data_seek(0);
+                                if ($testimonial_result->num_rows > 0):
+                                    $indicator_count = 0; // Counter for indicators
+                                    while ($row = $testimonial_result->fetch_assoc()):
+                                        if ($indicator_count % 2 == 0): // Only create an indicator for each pair
+                                ?>
+                                <li class="<?php echo $indicator_count === 0 ? 'active' : ''; ?> mx-2" data-bs-target="#carouselTestimonials" data-bs-slide-to="<?php echo $indicator_count / 2; ?>"></li>
+                                <?php
+                                        endif;
+                                        $indicator_count++; // Increment the counter
+                                    endwhile;
+                                endif;
+                                ?>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end of .container -->
+</section>
+
+
       <!-- <section> close ============================-->
       <!-- ============================================-->
 
